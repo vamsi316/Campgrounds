@@ -17,6 +17,7 @@ const User = require('./models/user');
 const helmet = require('helmet');
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/campgrounds-project';
 const MongoStore = require('connect-mongo');
+const secret = process.env.SECRET || 'thisshouldbeabettersecret'
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -57,7 +58,7 @@ app.use(mongoSanitize({
 
 const sessionConfig = {
     name: 'session',
-    secret: 'thisshouldbeabettersecret!',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -158,7 +159,9 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err })
 })
 
-app.listen(3000, () => {
-    console.log('Serving on port 3000')
+const port = process.env.PORT || 3000
+
+app.listen(port, () => {
+    console.log(`Serving on port ${port}`)
 })
 
